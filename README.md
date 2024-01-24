@@ -1,3 +1,5 @@
+Den er bare lige oversat til dansk. Alt det vilde arbejde har Randol lavet.
+
 # randol_multijob
 A multi-job for QBCore/QBOX using ox_lib. [https://github.com/overextended/ox_lib/releases/tag/v3.1.4]
 
