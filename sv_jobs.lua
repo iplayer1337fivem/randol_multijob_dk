@@ -43,7 +43,7 @@ RegisterNetEvent('randol_multijob:server:changeJob', function(job, grade)
     local Player = QBCore.Functions.GetPlayer(src)
 
     if Player.PlayerData.job.name == job then 
-        QBCore.Functions.Notify(src, 'Your current job is already set to this.', 'error') 
+        QBCore.Functions.Notify(src, 'Du har allerede valgt dette job.', 'error') 
         return 
     end
 
@@ -63,7 +63,7 @@ RegisterNetEvent('randol_multijob:server:changeJob', function(job, grade)
     Player.Functions.SetJob(job, grade)
     Player.Functions.SetJobDuty(false)
     TriggerClientEvent('QBCore:Client:SetDuty', src, false)
-    QBCore.Functions.Notify(src, 'Your job is now: ' .. jobInfo.label)
+    QBCore.Functions.Notify(src, 'Dit job er nu: ' .. jobInfo.label)
 end)
 
 RegisterNetEvent('randol_multijob:server:newJob', function(newJob)
@@ -81,7 +81,7 @@ RegisterNetEvent('randol_multijob:server:newJob', function(newJob)
     if not hasJob and GetJobCount(cid) < Config.MaxJobs then 
 	MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {cid, newJob.name, newJob.grade.level})
     else
-        return QBCore.Functions.Notify(src, 'You have the max amount of jobs.', 'error')
+        return QBCore.Functions.Notify(src, 'Du har max antal jobs.', 'error')
     end
 end)
 
@@ -89,7 +89,7 @@ RegisterNetEvent('randol_multijob:server:deleteJob', function(job)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? and job = ?', {Player.PlayerData.citizenid, job})
-    QBCore.Functions.Notify(src, 'You deleted '..QBCore.Shared.Jobs[job].label..' job from your menu.')
+    QBCore.Functions.Notify(src, 'You deleted '..QBCore.Shared.Jobs[job].label..' job fra din menu.')
     Player.Functions.SetJob('unemployed', 0)
 end)
 
@@ -122,23 +122,23 @@ local function adminRemoveJob(src, id, job)
             Player.Functions.SetJob('unemployed', 0)
         end
     else
-        QBCore.Functions.Notify(src, 'Player doesn\'t have this job?', 'error')
+        QBCore.Functions.Notify(src, 'Spiller har ikke dette job?', 'error')
     end
 end
 
-QBCore.Commands.Add('removejob', "Remove a job from the player's multijob.", { { name = 'id', help = 'ID of the player' }, { name = 'job', help = 'Name of Job' } }, true, function(source, args)
+QBCore.Commands.Add('removejob', "Fjern job fra multijobmenu.", { { name = 'id', help = 'ID på spiller' }, { name = 'job', help = 'Navn på Job' } }, true, function(source, args)
     local src = source
     if not args[1] then 
-        QBCore.Functions.Notify(src, 'Must provide a player id.', 'error') 
+        QBCore.Functions.Notify(src, 'Der skal bruges et ID.', 'error') 
         return 
     end
     if not args[2] then 
-        QBCore.Functions.Notify(src, 'Must provide the name of the job to remove from the player.', 'error') 
+        QBCore.Functions.Notify(src, 'Du skal skrive det korrekte job for at fjerne det.', 'error') 
         return 
     end
     local id = tonumber(args[1])
     local Player = QBCore.Functions.GetPlayer(id)
-    if not Player then QBCore.Functions.Notify(src, 'Player not online.', 'error') return end
+    if not Player then QBCore.Functions.Notify(src, 'Spiller ikke online.', 'error') return end
 
     adminRemoveJob(src, id, args[2])
 end, 'admin')
