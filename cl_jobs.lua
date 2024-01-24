@@ -2,15 +2,15 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 RegisterCommand('myjobs', function(source, args)
     local PlayerData = QBCore.Functions.GetPlayerData()
-    local dutyStatus = PlayerData.job.onduty and 'On Duty' or 'Off Duty'
+    local dutyStatus = PlayerData.job.onduty and 'På job' or 'Fri'
     local dutyIcon = PlayerData.job.onduty and 'fa-solid fa-toggle-on' or 'fa-solid fa-toggle-off'
     local jobMenu = {
         id = 'job_menu',
-        title = 'My Jobs',
+        title = 'Mine Jobs',
         options = {
             {
-                title = 'Toggle Duty',
-                description = 'Current Status: ' .. dutyStatus,
+                title = 'Skift tjeneste',
+                description = 'Status: ' .. dutyStatus,
                 icon = dutyIcon,
                 event = 'randol_multijob:client:toggleDuty',
                 args = {},
@@ -23,7 +23,7 @@ RegisterCommand('myjobs', function(source, args)
                 local isDisabled = PlayerData.job.name == job.job
                 jobMenu.options[#jobMenu.options + 1] = {
                     title = job.jobLabel,
-                    description = 'Grade: ' .. job.gradeLabel .. ' [' .. tonumber(job.grade) .. ']\nSalary: $' .. job.salary,
+                    description = 'Rank: ' .. job.gradeLabel .. ' [' .. tonumber(job.grade) .. ']\nLøn: Kr' .. job.salary,
                     icon = Config.JobIcons[job.job] or 'fa-solid fa-briefcase',
                     arrow = true,
                     disabled = isDisabled,
@@ -37,24 +37,24 @@ RegisterCommand('myjobs', function(source, args)
     end)
 end)
 
-RegisterKeyMapping('myjobs', 'Multi Job', 'keyboard', 'F10')
+RegisterKeyMapping('myjobs', 'Multi Job', 'keyboard', 'J')
 
 AddEventHandler('randol_multijob:client:choiceMenu', function(args)
     local displayChoices = {
         id = 'choice_menu',
-        title = 'Job Actions',
+        title = 'Job menu',
         menu = 'job_menu',
         options = {
             {
-                title = 'Switch Job',
-                description = 'Switch your job to: '..args.jobLabel,
+                title = 'SkiftJob',
+                description = 'Skift dit job til: '..args.jobLabel,
                 icon = 'fa-solid fa-circle-check',
                 event = 'randol_multijob:client:changeJob',
                 args = {job = args.job, grade = args.grade}
             },
             {
-                title = 'Delete Job',
-                description = 'Delete the selected job: '..args.jobLabel,
+                title = 'Slet Job',
+                description = 'Slet valgte job: '..args.jobLabel,
                 icon = 'fa-solid fa-trash-can',
                 event = 'randol_multijob:client:deleteJob',
                 args = {job = args.job}
